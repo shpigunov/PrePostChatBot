@@ -1,13 +1,17 @@
 import asyncio
 import logging
+import os
+
+from dotenv import load_dotenv
+load_dotenv('.env')
+TOKEN:str = os.getenv('BOT_TOKEN')
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import Command
 from aiogram.types import Message
 
-# Bot token can be obtained via https://t.me/BotFather
-TOKEN = "6453383827:AAHSltt2ECh9WCsV79GMo5tuin_ZJjSY6JQ"
-
+from helpers.messenger import send_simple_message
+from helpers.shared import context
 
 async def main() -> None:
     # Dispatcher is a root router
@@ -19,8 +23,9 @@ async def main() -> None:
         event,
         data,
     ):
-        print(f"---------------event:\n {event}")
-        print(f"---------------data:\n {data}")
+        context['message']=event.message
+        await send_simple_message('Answer to message from env')
+        
         return await handler(event, data)
 
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
