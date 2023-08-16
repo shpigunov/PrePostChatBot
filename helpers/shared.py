@@ -1,1 +1,1 @@
-context = {'message':None}
+context = {}
