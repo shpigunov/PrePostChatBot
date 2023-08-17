@@ -3,8 +3,9 @@ import logging
 import os
 
 from dotenv import load_dotenv
-load_dotenv('.env')
-TOKEN:str = os.getenv('BOT_TOKEN')
+
+load_dotenv(".env")
+TOKEN: str = os.getenv("BOT_TOKEN")
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import Command
@@ -14,6 +15,7 @@ from helpers.messenger import send_message
 from helpers.shared import context
 
 from middleware.router import router
+
 
 async def main() -> None:
     # Dispatcher is a root router
@@ -25,10 +27,10 @@ async def main() -> None:
         event,
         data,
     ):
-        print('event--------------',event)
-        print('data---------------',data)
+        print("event--------------", event)
+        print("data---------------", data)
 
-        chat_id = data['event_from_user'].id
+        chat_id = data["event_from_user"].id
 
         try:
             context[chat_id]
@@ -45,20 +47,19 @@ async def main() -> None:
 
         if event.message:
             message = event.message
-            context[chat_id]['recieved_message']=message
+            context[chat_id]["recieved_message"] = message
 
-        
         await router(chat_id, user_message)
 
         # print(context)
         # !!!context['chat_id']=event.chat_id
         # await send_message('Answer to message from context')
-        
+
         return await handler(event, data)
 
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
     bot = Bot(TOKEN, parse_mode="HTML")
-    context['bot'] = bot
+    context["bot"] = bot
     # And the run events dispatching
     await dp.start_polling(bot)
 
