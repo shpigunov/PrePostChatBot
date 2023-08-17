@@ -1,4 +1,12 @@
 from datetime import datetime
+from enum import Enum
+
+class GameState(Enum):
+    PENDING = 1
+    TEAMS_FORMING = 2
+    ROUND_STARTED = 3
+    ROUND_FINISHED = 4
+    GAME_FINISHED = 5
 
 # Запитання в грі
 class Question:
@@ -40,11 +48,12 @@ class Round:
 
 # гра (серія раундів)
 class Game:
-    def __init__(self, id: int, time: datetime, initiatingUserId: int, initiatingUser: User, numberOfRounds: int, isTest: bool):
+    def __init__(self, id: int, time: datetime, initiatingUserId: int, initiatingUser: User, gameState: GameState, numberOfRounds: int, isTest: bool):
         self.id = id
         self.time = time
         self.initiatingUserId = initiatingUserId
         self.initiatingUser = initiatingUser
+        self.gameState = gameState
         self.numberOfRounds = numberOfRounds
         self.isTest = isTest
 
