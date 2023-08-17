@@ -97,3 +97,11 @@ class UserToGame:
         self.game = game
         self.score = score
         self.place = place
+
+# користувач-команда - хто до якої команди належить у кожній грі
+class UserToTeam:
+    def __init__(self, userId: int, user: User, teamId: int, team: Team):
+        self.userId = userId
+        self.user = user
+        self.teamId = teamId
+        self.team = team
