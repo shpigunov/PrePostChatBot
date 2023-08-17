@@ -1,5 +1,5 @@
+from enum import Enum, auto
 from helpers.shared import context
-from helpers.messenger import send_message, update_last_message
 
 
 import handlers  # імпорт повністю

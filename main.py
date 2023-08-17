@@ -11,7 +11,6 @@ from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from helpers.messenger import send_message
 from helpers.shared import context
 
 from middleware.router import router
