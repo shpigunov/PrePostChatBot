@@ -5,7 +5,7 @@ def start_handler(state: GameState, message: str, context: dict):
     pass
 
 
-def begin_handler(state: GameState, message: str, context: dict):
+def begin_game_handler(state: GameState, message: str, context: dict):
     pass
 
 
