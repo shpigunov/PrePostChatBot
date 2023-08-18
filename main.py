@@ -1,68 +1,36 @@
 import asyncio
 import logging
-import os
+import sys
+from os import getenv
 
+from aiogram import Bot, Dispatcher, F, html
+from aiogram.enums import ParseMode
 from dotenv import load_dotenv
-load_dotenv('.env')
-TOKEN:str = os.getenv('BOT_TOKEN')
 
-from aiogram import Bot, Dispatcher, Router, types
-from aiogram.filters import Command
-from aiogram.types import Message
+from middleware.router import GameState, router
+from middleware.handlers import *  # noqa: F403
 
-from helpers.messenger import send_message
-from helpers.shared import context
+load_dotenv()
+TOKEN = getenv("BOT_TOKEN")
+if not TOKEN:
+    sys.exit("Set BOT_TOKEN env variable")
 
-from middleware.router import router
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
-async def main() -> None:
-    # Dispatcher is a root router
+
+async def main():
+    bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
     dp = Dispatcher()
-
-    @dp.update.outer_middleware()
-    async def main_mw(
-        handler,
-        event,
-        data,
-    ):
-        print('event--------------',event)
-        print('data---------------',data)
-
-        chat_id = data['event_from_user'].id
-
-        try:
-            context[chat_id]
-        except:
-            context[chat_id] = {}
-
-        try:
-            user_message = event.callback_query.data
-        except:
-            try:
-                user_message = event.message.text
-            except Exception as e:
-                print(e)
-
-        if event.message:
-            message = event.message
-            context[chat_id]['recieved_message']=message
-
-        
-        await router(chat_id, user_message)
-
-        # print(context)
-        # !!!context['chat_id']=event.chat_id
-        # await send_message('Answer to message from context')
-        
-        return await handler(event, data)
-
-    # Initialize Bot instance with a default parse mode which will be passed to all API calls
-    bot = Bot(TOKEN, parse_mode="HTML")
-    context['bot'] = bot
-    # And the run events dispatching
+    dp.include_router(router)
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+
+    try:
+        asyncio.run(main())
+
+    except (KeyboardInterrupt, SystemExit):
+        logging.info("Bot stopped!")
