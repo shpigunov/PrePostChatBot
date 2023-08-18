@@ -16,7 +16,6 @@ if not TOKEN:
     sys.exit("Set BOT_TOKEN env variable")
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 
 async def main():
