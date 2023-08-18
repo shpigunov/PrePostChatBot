@@ -1,5 +1,5 @@
 import logging
-
+from entities.ensureUserExists import ensureUserExists
 
 from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
@@ -133,7 +133,8 @@ logging.basicConfig(level=logging.INFO)
 @router.message(CommandStart())
 async def start_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(GameState.Start)
-
+    ensureUserExists(state.name, state.telegramUserId)
+    
     await message.answer(
         "Hi there! Welcome to the game!",
         reply_markup=ReplyKeyboardRemove(),
