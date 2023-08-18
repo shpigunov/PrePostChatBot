@@ -133,7 +133,7 @@ logging.basicConfig(level=logging.INFO)
 @router.message(CommandStart())
 async def start_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(GameState.Start)
-    ensureUserExists(state.name, state.telegramUserId)
+    ensureUserExists(message.from_user.full_name, message.from_user.id)
     
     await message.answer(
         "Hi there! Welcome to the game!",
