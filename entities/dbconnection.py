@@ -42,7 +42,8 @@ def addQuestion(questionText, answers):
     questionId = queryToDatabase(query, isWrite=True)
     for answer in answers:
         answerText = answer[0]
+        answerIsCorrect = answer[1]
         if (len(answerText) > 100):
             answerText = answerText[:100]
-        query = f"INSERT INTO Answer(Id, QuestionId, Text, IsCorrect) VALUES(NULL, {questionId}, {repr(answer[0])}, {1 if answer[1] else 0})"
+        query = f"INSERT INTO Answer(Id, QuestionId, Text, IsCorrect) VALUES(NULL, {questionId}, {repr(answerText)}, {1 if answerIsCorrect else 0})"
         queryToDatabase(query, isWrite=True)
