@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pre-post-chat-bot"
+version = "0.1.0"
+description = "Telegram Bot to play the Aumann Game"
+authors = ["pre-post-team"]
+readme = "README.md"
+# packages = [{ include = "pre_post_chat_bot" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+aiogram = { version = "^3.0.0rc1", allow-prereleases = true }
+pymysql = "^1.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.5.1"
+ruff = "^0.0.284"
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
