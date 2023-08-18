@@ -1,16 +1,16 @@
 from datetime import datetime
-from enum import Enum
 
-class GameState(Enum):
-    PENDING = 1
-    TEAMS_FORMING = 2
-    ROUND_STARTED = 3
-    ROUND_FINISHED = 4
-    GAME_FINISHED = 5
+# користувач бота (гравець)
+class User:    
+    def __init__(self, id: int, telegramUserId: int, name: str):
+        self.id = id
+        self.telegramUserId = telegramUserId
+        self.name = name
 
 # Запитання в грі
 class Question:
-    def __init__(self, id: int, text: str, isTest: bool, hasBeenPlayed: bool, authorId: int, author: User, correctAnswerId: int, correctAnswer: Answer):
+    # correctAnswer має бути типу Answer, але Python не дозволяє циркулярних залежностей, тому тип цього параметра непідписаний
+    def __init__(self, id: int, text: str, isTest: bool, hasBeenPlayed: bool, authorId: int, author: User, correctAnswerId: int, correctAnswer):
         self.id = id
         self.text = text
         self.isTest = isTest
@@ -19,6 +19,10 @@ class Question:
         self.author = author
         self.correctAnswerId = correctAnswerId
         self.correctAnswer = correctAnswer
+        self.answers = []
+    
+    def __repr__(self):
+        return f'text="{self.text}", answers=[' + ', '.join(map(lambda x: repr(x), self.answers)) + ']'
 
 # варіант відповіді на запитання
 class Answer:
@@ -28,13 +32,19 @@ class Answer:
         self.question = question
         self.text = text
         self.isCorrect = isCorrect
+    def __repr__(self):
+        return f'"{self.text}"'
 
-# користувач бота (гравець)
-class User:    
-    def __init__(self, id: int, telegramUserId: int, name: str):
+# гра (серія раундів)
+class Game:
+    def __init__(self, id: int, time: datetime, initiatingUserId: int, initiatingUser: User, gameState: int, numberOfRounds: int, isTest: bool):
         self.id = id
-        self.telegramUserId = telegramUserId
-        self.name = name
+        self.time = time
+        self.initiatingUserId = initiatingUserId
+        self.initiatingUser = initiatingUser
+        self.gameState = gameState
+        self.numberOfRounds = numberOfRounds
+        self.isTest = isTest
 
 # раунд гри (одне запитання, зігране в певний момент часу)
 class Round:
@@ -45,17 +55,6 @@ class Round:
         self.gameId = gameId
         self.game = game
         self.time = time
-
-# гра (серія раундів)
-class Game:
-    def __init__(self, id: int, time: datetime, initiatingUserId: int, initiatingUser: User, gameState: GameState, numberOfRounds: int, isTest: bool):
-        self.id = id
-        self.time = time
-        self.initiatingUserId = initiatingUserId
-        self.initiatingUser = initiatingUser
-        self.gameState = gameState
-        self.numberOfRounds = numberOfRounds
-        self.isTest = isTest
 
 # команда гравців
 class Team:
