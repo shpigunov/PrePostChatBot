@@ -159,6 +159,14 @@ async def quit_handler(message: Message, state: FSMContext) -> None:
     )
 
 
+@router.message(Command("help"))
+async def help_handler(message: Message, state: FSMContext) -> None:
+    current_state = await state.get_state()
+    await message.answer(
+        "Цей бот вміє натсупне:.... Правила цієї гри такі:... Ось табличка із обчисленням",
+    )
+
+
 async def begin_game_handler(message: Message, state: FSMContext) -> None:
     pass
 
